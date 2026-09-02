@@ -1,0 +1,41 @@
+services:
+
+  db:
+    ports:
+      - "27017:27017"
+
+  backend:
+    ports:
+      - "8000:8000"
+    build:
+      context: .
+      dockerfile: Dockerfile
+    # command: sleep infinity  # Infinite loop to keep container alive doing nothing
+    command:
+      - fastapi
+      - dev
+      - --host
+      - "0.0.0.0"
+    develop:
+      watch:
+        - path: ./app
+          action: sync
+          target: /app/app
+          ignore:
+            - __pycache__
+            - .venv
+        - path: ./pyproject.toml
+          action: rebuild
+        - path: ./uv.lock
+          action: rebuild
+    environment:
+      FASTAPI_ENV: "development"
+      SMTP_HOST: "mailpit"
+      SMTP_PORT: "1025"
+      SMTP_TLS: "false"
+
+  mailpit:
+    image: axllent/mailpit
+    ports:
+      - "8025:8025"
+      - "1025:1025"

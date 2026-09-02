@@ -1,0 +1,9 @@
+.git
+**/__pycache__
+**/.venv
+coverage/
+htmlcov
+.mypy_cache
+.ty_cache
+node_modules
+tests/

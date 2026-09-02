@@ -1,0 +1,41 @@
+services:
+
+  db:
+    image: mongo:8
+    healthcheck:
+      test: ["CMD-SHELL", "mongosh --quiet --eval 'db.adminCommand(\"ping\").ok' | grep 1"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+    volumes:
+      - app-db-data:/data/db
+
+  backend:
+    image: backend:latest
+    depends_on:
+      db:
+        condition: service_healthy
+        restart: true
+    environment:
+      PROJECT_NAME: ${PROJECT_NAME:?Variable not set}
+      SECRET_KEY: ${SECRET_KEY:?Variable not set}
+      FIRST_SUPERUSER: ${FIRST_SUPERUSER:?Variable not set}
+      FIRST_SUPERUSER_PASSWORD: ${FIRST_SUPERUSER_PASSWORD:?Variable not set}
+      SMTP_HOST: ${SMTP_HOST}
+      SMTP_USER: ${SMTP_USER:-}
+      SMTP_PASSWORD: ${SMTP_PASSWORD:-}
+      EMAILS_FROM_EMAIL: ${EMAILS_FROM_EMAIL}
+      MONGO_URL: mongodb://db:27017/app
+      SENTRY_DSN: ${SENTRY_DSN:-}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+volumes:
+  app-db-data:
