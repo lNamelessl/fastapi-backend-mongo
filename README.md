@@ -6,7 +6,7 @@ All frontend code and the PostgreSQL/SQLModel/Alembic stack have been removed. D
 
 ## Deploy on Railway
 
-[![Deploy on Railway](https://railway.com/button.svg)](https://railway.app/new?github_url=https://github.com/OWNER/REPO)
+[![Deploy on Railway](https://railway.com/button.svg)](https://railway.app/new?github_url=https://github.com/lNamelessl/fastapi-backend-mongo)
 
 The template provisions:
 
