@@ -6,14 +6,14 @@ All frontend code and the PostgreSQL/SQLModel/Alembic stack have been removed. D
 
 ## Deploy on Railway
 
-[![Deploy on Railway](https://railway.com/button.svg)](https://railway.app/new?github_url=https://github.com/lNamelessl/fastapi-backend-mongo)
+[![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/deploy/fastapi-backend-mongo)
 
 The template provisions:
 
 - **backend** — FastAPI app (Dockerfile build, binds to Railway's `$PORT`, healthcheck at `/health`)
 - **MongoDB** — Railway's MongoDB database plugin; the app reads its `MONGO_URL`
 
-After the deploy finishes, set these variables on the `backend` service (the template sets them for you when deploying from the button):
+The deploy form prompts for these variables (`MONGO_URL` is pre-wired to the MongoDB service):
 
 | Variable | Example | Notes |
 | --- | --- | --- |
