@@ -24,7 +24,7 @@ class Settings(BaseSettings):
     FRONTEND_HOST: str = "http://localhost:5173"
     FASTAPI_ENV: Literal["development"] | None = None
 
-    PROJECT_NAME: str
+    PROJECT_NAME: str = "FastAPI Backend Mongo"
     SENTRY_DSN: HttpUrl | None = None
 
     # MongoDB connection string. Accepts Railway's MONGO_URL and, as a
@@ -66,7 +66,7 @@ class Settings(BaseSettings):
         return bool(self.SMTP_HOST and self.EMAILS_FROM_EMAIL)
 
     EMAIL_TEST_USER: EmailStr = "test@example.com"
-    FIRST_SUPERUSER: EmailStr
+    FIRST_SUPERUSER: EmailStr = "admin@example.com"
     FIRST_SUPERUSER_PASSWORD: str
 
     @model_validator(mode="after")
