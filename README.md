@@ -13,15 +13,13 @@ The template provisions:
 - **backend** — FastAPI app (Dockerfile build, binds to Railway's `$PORT`, healthcheck at `/health`)
 - **MongoDB** — Railway's MongoDB database plugin; the app reads its `MONGO_URL`
 
-The deploy form prompts for these variables (`MONGO_URL` is pre-wired to the MongoDB service):
+**No variables required before deployment.** Everything is wired automatically:
 
-| Variable | Example | Notes |
-| --- | --- | --- |
-| `MONGO_URL` | `${{MongoDB.MONGO_URL}}` | Parsed from Railway's MongoDB service (`DATABASE_URL` is also accepted as a fallback) |
-| `SECRET_KEY` | `openssl rand -hex 32` | JWT signing key |
-| `FIRST_SUPERUSER` | `admin@example.com` | Seeded on first boot |
-| `FIRST_SUPERUSER_PASSWORD` | a strong password | Seeded on first boot |
-| `PROJECT_NAME` | `My Project` | Shown in OpenAPI docs |
+- `MONGO_URL` — pre-wired to `${{MongoDB.MONGO_URL}}` (the MongoDB service builds its own connection string from generated credentials)
+- `SECRET_KEY` (JWT signing) and the MongoDB root username/password — generated fresh per deployment via `${{ secret(...) }}` references
+- `PROJECT_NAME` and `FIRST_SUPERUSER` — defaults baked into the app (`FastAPI Backend Mongo`, `admin@example.com`)
+
+After the deploy, copy the generated `FIRST_SUPERUSER_PASSWORD` from the `backend` service's **Variables** tab — that password (with `admin@example.com`) logs you into the API. To override any of the defaults, set the corresponding variable before the first boot (seeding is idempotent and only runs once).
 
 Index creation and the first-superuser seed run automatically at container start (`scripts/prestart.sh`, chained before the server in both the Dockerfile `CMD` and the `railway.json` `startCommand`), so no manual migration step is needed.
 
